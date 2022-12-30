@@ -1,10 +1,10 @@
 use anchor_lang::prelude::*;
+use anchor_lang::solana_program::entrypoint::ProgramResult;
 
 declare_id!("Fg6PaFpoGXkYsidMpWTK6W2BeZ7FEfcYkg476zPFsLnS");
 
 #[program]
 pub mod crowdfunding {
-    use anchor_lang::solana_program::entrypoint::ProgramResult;
 
     use super::*;
 
@@ -34,6 +34,18 @@ pub mod crowdfunding {
         **user.to_account_info().try_borrow_mut_lamports()? += amount;
         Ok(())
     }
+
+    pub fn donate(ctx: Context<Donate>, amount: u64) -> ProgramResult {
+        let user = &mut ctx.accounts.user;
+        let campaign = &mut ctx.accounts.campaign;
+
+        if **user.to_account_info().lamports.borrow() < amount {
+            return Err(ProgramError::InsufficientFunds);
+        }
+        **user.to_account_info().try_borrow_mut_lamports()? -= amount;
+        **campaign.to_account_info().try_borrow_mut_lamports()? += amount;
+        Ok(())
+    }
 }
 /* this derive indicates that we will declare a Context. */
 #[derive(Accounts)]
@@ -51,6 +63,15 @@ pub struct Withdraw<'info> {
     pub user: Signer<'info>,
     #[account(mut)]
     pub campaign: Account<'info, Campaign>,
+}
+
+#[derive(Accounts)]
+pub struct Donate<'info> {
+    #[account(mut)]
+    pub user: Signer<'info>,
+    #[account(mut)]
+    pub campaign: Account<'info, Campaign>,
+    pub system_program: Program<'info, System>,
 }
 /* This macro indicates that me will we creating an account */
 #[account]
