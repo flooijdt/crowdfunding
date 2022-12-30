@@ -16,8 +16,11 @@ pub mod crowdfunding {
         campaign.admin = *ctx.accounts.user.key;
         Ok(())
     }
-}
 
+    /* Allows the admin to withdraw funds from his campaign */
+    pub fn withdraw(ctx: Context<Withdraw>, amount: u64) -> Result<()> {}
+}
+/* this derive indicates that we will declare a Context. */
 #[derive(Accounts)]
 pub struct Create<'info> {
     #[account(init, payer=user, space=9000, seeds=[b"CAMPAIGN_DEMO".as_ref(),user.key().as_ref()], bump)]
@@ -26,7 +29,7 @@ pub struct Create<'info> {
     pub user: Signer<'info>,
     pub system_program: Program<'info, System>,
 }
-
+/* This macro indicates that we will be creating an account */
 #[account]
 pub struct Campaign {
     pub admin: Pubkey,
