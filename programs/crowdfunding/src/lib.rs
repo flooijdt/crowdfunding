@@ -18,7 +18,21 @@ pub mod crowdfunding {
     }
 
     /* Allows the admin to withdraw funds from his campaign */
-    pub fn withdraw(ctx: Context<Withdraw>, amount: u64) -> Result<()> {}
+    pub fn withdraw(ctx: Context<Withdraw>, amount: u64) -> Result<()> {
+        let campaign = &mut ctx.accounts.campaign;
+        let user = &mut ctx.accounts.user;
+        if campaign.admin != *user.key {
+            return Err(ProgramError::IncorrectProgramId);
+        }
+        /* here i want to get the amount necessary to be rent exempt (2 years worth of rent) */
+        let rent_balance = Rent::get()?.minimum_balance(campaign.to_account_info().data_len());
+        if **campaign.to_account_info().lamports.borrow() - rent_balance < amount {
+            return Err(ProgramError::InsufficientFunds);
+        }
+        **campaign.to_account_info().try_borrow_mut_lamports()? -= amount;
+        **user.to_account_info().try_borrow_mut_lamports()? += amount;
+        Ok(())
+    }
 }
 /* this derive indicates that we will declare a Context. */
 #[derive(Accounts)]
@@ -31,14 +45,13 @@ pub struct Create<'info> {
 }
 
 #[derive(Accounts)]
-pub struct Withdraw<'info> {
-    #[account(init, payer=user, space=9000, seeds=[b"CAMPAIGN_DEMO".as_ref(),user.key().as_ref()], bump)]
-    pub campaign: Account<'info, Campaign>,
+pub struct Withdram<'info> {
     #[account(mut)]
     pub user: Signer<'info>,
-    pub system_program: Program<'info, System>,
+    #[account(mut)]
+    pub campaign: Account<'info, Campaign>,
 }
-/* This macro indicates that we will be creating an account */
+/* This macro indicates that me will we creating an account */
 #[account]
 pub struct Campaign {
     pub admin: Pubkey,
