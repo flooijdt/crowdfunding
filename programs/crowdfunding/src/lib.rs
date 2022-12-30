@@ -29,6 +29,15 @@ pub struct Create<'info> {
     pub user: Signer<'info>,
     pub system_program: Program<'info, System>,
 }
+
+#[derive(Accounts)]
+pub struct Withdraw<'info> {
+    #[account(init, payer=user, space=9000, seeds=[b"CAMPAIGN_DEMO".as_ref(),user.key().as_ref()], bump)]
+    pub campaign: Account<'info, Campaign>,
+    #[account(mut)]
+    pub user: Signer<'info>,
+    pub system_program: Program<'info, System>,
+}
 /* This macro indicates that we will be creating an account */
 #[account]
 pub struct Campaign {
