@@ -48,7 +48,7 @@ pub struct Create<'info> {
 }
 
 #[derive(Accounts)]
-pub struct Withdram<'info> {
+pub struct Withdraw<'info> {
     #[account(mut)]
     pub user: Signer<'info>,
     #[account(mut)]
