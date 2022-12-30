@@ -1,14 +1,17 @@
 use anchor_lang::prelude::*;
+use anchor_lang::solana_program::entrypoint::ProgramResult;
 
 declare_id!("Fg6PaFpoGXkYsidMpWTK6W2BeZ7FEfcYkg476zPFsLnS");
 
 #[program]
 pub mod crowdfunding {
+    use anchor_lang::solana_program::entrypoint::ProgramResult;
+
     use super::*;
 
     /* Context is a list of the accounts that hold the data that will be used by the program.
     Remember that programs cannot hold data!  */
-    pub fn create(ctx: Context<Create>, name: String, description: String) -> Result<()> {
+    pub fn create(ctx: Context<Create>, name: String, description: String) -> ProgramResult {
         let campaign = &mut ctx.accounts.campaign;
         campaign.name = name;
         campaign.description = description;
@@ -18,7 +21,7 @@ pub mod crowdfunding {
     }
 
     /* Allows the admin to withdraw funds from his campaign */
-    pub fn withdraw(ctx: Context<Withdraw>, amount: u64) -> Result<()> {
+    pub fn withdraw(ctx: Context<Withdraw>, amount: u64) -> ProgramResult {
         let campaign = &mut ctx.accounts.campaign;
         let user = &mut ctx.accounts.user;
         if campaign.admin != *user.key {
