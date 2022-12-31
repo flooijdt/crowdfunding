@@ -11,6 +11,8 @@ const App = () => {
       if (solana) {
         if (solana.isPhantom) {
           console.log("Phantom wallet found!");
+          /* Checks if user is logged in */
+
         }
       } else {
         alert("Solana object not found!");
