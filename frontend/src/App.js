@@ -12,6 +12,9 @@ const App = () => {
         if (solana.isPhantom) {
           console.log("Phantom wallet found!");
           /* Checks if user is logged in */
+          const response = await solana.connect({
+            OnlyIfTrusted: true,
+          });
 
         }
       } else {
