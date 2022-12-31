@@ -37,7 +37,7 @@ pub mod crowdfunding {
 
     pub fn donate(ctx: Context<Donate>, amount: u64) -> ProgramResult {
         /* The program gives the user authority to realise the transaction. */
-        let ix = anchor_lang::solana_program::system_program::transfer(
+        let ix = anchor_lang::solana_program::system_instruction::transfer(
             &ctx.accounts.user.key(),
             &ctx.accounts.campaign.key(),
             amount,
