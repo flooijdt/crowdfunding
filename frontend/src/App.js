@@ -15,7 +15,10 @@ const App = () => {
           const response = await solana.connect({
             OnlyIfTrusted: true,
           });
-
+          console.log(
+            "Connected with public key:",
+            response.publicKey.toString()
+          );
         }
       } else {
         alert("Solana object not found!");
