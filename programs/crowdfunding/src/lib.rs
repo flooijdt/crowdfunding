@@ -36,14 +36,21 @@ pub mod crowdfunding {
     }
 
     pub fn donate(ctx: Context<Donate>, amount: u64) -> ProgramResult {
-        let user = &mut ctx.accounts.user;
-        let campaign = &mut ctx.accounts.campaign;
-
-        if **user.to_account_info().lamports.borrow() < amount {
-            return Err(ProgramError::InsufficientFunds);
-        }
-        **user.to_account_info().try_borrow_mut_lamports()? -= amount;
-        **campaign.to_account_info().try_borrow_mut_lamports()? += amount;
+        /* The program gives the user authority to realise the transaction. */
+        let ix = anchor_lang::solana_program::system_program::transfer(
+            &ctx.accounts.user.key(),
+            &ctx.accounts.campaign.key(),
+            amount,
+        );
+        /* Invoke the transaction */
+        anchor_lang::solana_program::program::invoke(
+            &ix,
+            &[
+                ctx.accounts.user.to_account_info(),
+                ctx.accounts.campaign.to_account_info(),
+            ],
+        );
+        (&mut ctx.accounts.campaign).amount_donated += amount;
         Ok(())
     }
 }
