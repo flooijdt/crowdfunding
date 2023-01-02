@@ -11,6 +11,9 @@ import {
 
 const App = () => {
   const [walletAddress, setWalletAddress] = useState(null);
+  const getProvider = () => {
+    const connection = new Connection(network, opts.preflightCommitment)
+  }
   const checkIfWalletIsConnected = async () => {
     try {
       /* Phantom wallet, when connected adds this solana object into your window object */
