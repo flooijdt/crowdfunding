@@ -27,6 +27,11 @@ const App = () => {
       console.error(error);
     }
   }
+  const connectWallet = async () => { };
+
+  const renderNotConnectedContainer = () => {
+    <button>  </button>
+  }
   useEffect(() => {
     const onLoad = async () => {
       await checkIfWalletIsConnected();
