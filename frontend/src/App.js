@@ -1,5 +1,5 @@
 import './App.css';
-import { useEffect ,useState } from "react";
+import { useEffect, useState } from "react";
 
 const App = () => {
   const [walletAddress, setWalletAddress] = useState(null);
@@ -30,7 +30,7 @@ const App = () => {
     }
   }
   const connectWallet = async () => {
-    const {solana} = window;
+    const { solana } = window;
     if (solana) {
       const response = await solana.connect();
       console.log(
