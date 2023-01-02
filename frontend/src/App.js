@@ -32,7 +32,7 @@ const App = () => {
   const connectWallet = async () => {
     const {solana} = window;
     if (solana) {
-      const response = solana.connect();
+      const response = await solana.connect();
       console.log(
         "Connected with publicKey:",
         response.publicKey.toString()
