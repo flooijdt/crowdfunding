@@ -1,7 +1,9 @@
 import './App.css';
-import { useEffect } from "react";
+import { useEffect ,useState } from "react";
+import { set } from '@project-serum/anchor/dist/cjs/utils/features';
 
 const App = () => {
+  const {walletAdress, setWalletAdress} = useState(null);
   const checkIfWalletIsConnected = async () => {
     try {
       /* Phantom wallet, when connected adds this solana object into your window object */
@@ -19,6 +21,7 @@ const App = () => {
             "Connected with public key:",
             response.publicKey.toString()
           );
+          setWalletAdress(response.publicKey.toString());
         }
       } else {
         alert("Solana object not found!");
@@ -30,15 +33,16 @@ const App = () => {
   const connectWallet = async () => { };
 
   const renderNotConnectedContainer = () => {
-    <button>  </button>
-  }
+    <button onClick={connectWallet}>Connect to wallet.</button>
+  };
   useEffect(() => {
     const onLoad = async () => {
       await checkIfWalletIsConnected();
     };
     window.addEventListener("load", onLoad);
     return () => window.removeEventListener("load", onLoad);
-  }, [])
-}
+  }, []);
+  return <div className='App'>{renderNotConnectedContainer()}</div>;
+};
 
 export default App;
