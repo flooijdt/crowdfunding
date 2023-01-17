@@ -18,7 +18,7 @@ pub mod crowdfunding {
         campaign.admin = *ctx.accounts.user.key;
         Ok(())
     }
-    /* Allows the admin to withdraw funds from his campaign */
+    /* Allows the admin to withdraw funds from his campaign. */
     pub fn withdraw(ctx: Context<Withdraw>, amount: u64) -> ProgramResult {
         let campaign = &mut ctx.accounts.campaign;
         let user = &mut ctx.accounts.user;
