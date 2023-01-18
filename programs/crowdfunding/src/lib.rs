@@ -25,7 +25,7 @@ pub mod crowdfunding {
         if campaign.admin != *user.key {
             return Err(ProgramError::IncorrectProgramId);
         }
-        /* here i want to get the amount necessary to be rent exempt (2 years worth of rent) */
+        /* here i want to get the amount necessary to be rent exempt (2 years worth of rent). */
         let rent_balance = Rent::get()?.minimum_balance(campaign.to_account_info().data_len());
         if **campaign.to_account_info().lamports.borrow() - rent_balance < amount {
             return Err(ProgramError::InsufficientFunds);
